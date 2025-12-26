@@ -1,8 +1,5 @@
 import numpy as np
-import scipy
 import sympy as sp
-
-
 
 
 class Metric:
