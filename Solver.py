@@ -1,5 +1,8 @@
 import numpy as np
+import scipy
 import sympy as sp
+
+
 
 
 class Metric:
@@ -55,15 +58,12 @@ class Metric:
 class Manifold:
     def __init__(self,
                  metric:Metric,
-                 divide_num=100
                  ):
         self._G=metric.G
         self._dG=metric.dG
         self._ddG=metric.ddG
         self._dim=metric._dim
-        
-        self._divide_num=divide_num
-        self._testfuncs_prep()
+        self._divide_num=None
 
     def _connection_coef_info(self,x):
         g=self._G(x)
@@ -95,6 +95,11 @@ class Manifold:
         
 
     def solve_geodesic(self,ini_line_node_coords,tol=1e-8):
+        divide_num=ini_line_node_coords.shape[0]-1
+        if divide_num!=self._divide_num:
+            self._divide_num=divide_num
+            self._testfuncs_prep()
+
         line=ini_line_node_coords.copy()
         free_ids=np.arange(self._dim,self._divide_num*self._dim,1,dtype=int)
         free2D_ids=np.ix_(free_ids,free_ids)
@@ -129,7 +134,6 @@ class Manifold:
 
 
 
-
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
@@ -146,7 +150,7 @@ if __name__ == '__main__':
                  [g_xy,g_yy]])
     
     metric=Metric([x,y],g)
-    manifold=Manifold(metric,100)
+    manifold=Manifold(metric)
     ini_line=np.c_[np.linspace(1.0,0.0,101),np.linspace(0.0,1.0,101)]
     line=manifold.solve_geodesic(ini_line)
     fig=plt.figure()
