@@ -76,7 +76,7 @@ class Manifold:
         temp_mlij=(np.einsum("...milj->...mlij",partial2_g)+np.einsum("...mjli->...mlij",partial2_g)-partial2_g)/2
         partial_m__Gammak_ij=np.einsum("...mkl,...lij->...mkij",partial_gI,Gamma_lij)+np.einsum("...kl,...mlij->...mkij",gI,temp_mlij)
         
-        return Gammak_ij,np.append(partial_m__Gammak_ij,partial_m__Gammak_ij,axis=1)
+        return Gammak_ij,np.append(partial_m__Gammak_ij/2,partial_m__Gammak_ij/2,axis=1)
 
     def _testfuncs_prep(self):
 
